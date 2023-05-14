@@ -359,6 +359,7 @@
 							case "sleeping":
 							case "sleep":
 								status = "在睡觉";
+								break;
 							case "wikibreak":
 							case "break":
 								status = "正在放萌百假期";
