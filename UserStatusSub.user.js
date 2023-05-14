@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UserStatusSub
 // @namespace    https://github.com/gui-ying233/UserStatusSub
-// @version      0.1.0
+// @version      0.1.1
 // @description  萌娘百科UserStatus订阅
 // @author       鬼影233
 // @contributor  BearBin@BearBin1215
