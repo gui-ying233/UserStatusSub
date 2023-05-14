@@ -1,0 +1,34 @@
+.userStatus {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, 11em);
+	gap: 1em;
+	padding: 1em;
+	justify-content: center;
+}
+
+.userStatusImg {
+	width: 25px;
+	vertical-align: middle;
+}
+
+.userStatusRaw {
+	display: grid;
+	gap: 0.5em;
+	border: var(--theme-just-kidding-text-color) dashed 1px;
+	padding: 0.5em;
+}
+
+.userStatusContent {
+	max-height: 11em;
+	overflow: auto;
+	transition: max-height 350ms;
+}
+
+.userStatusContent:hover {
+	max-height: 100%;
+}
+
+#userStatuUpdate {
+	margin: 1em 0;
+}
