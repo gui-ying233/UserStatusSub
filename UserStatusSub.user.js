@@ -302,10 +302,10 @@
 
 			mw.util
 				.addPortletLink(
-					"ca-userstatussub",
+					"p-cactions",
 					"javascript:void(0);",
 					"用户状态监控",
-					"p-userstatussub"
+					"ca-userstatussub"
 				)
 				.addEventListener("click", async () => {
 					$("#mw-notification-area").appendTo("body");
