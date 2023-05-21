@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UserStatusSub
 // @namespace    https://github.com/gui-ying233/UserStatusSub
-// @version      0.1.1
+// @version      1.0.0
 // @description  萌娘百科UserStatus订阅
 // @author       鬼影233
 // @contributor  BearBin@BearBin1215
@@ -367,6 +367,10 @@
 							case "holiday":
 								status = "处于假期中";
 								break;
+							default:
+								const s = document.createElement("div");
+								s.innerHTML = status;
+								status = s.innerText;
 						}
 						new Notification(`${title}已更新：`, {
 							body: status,
