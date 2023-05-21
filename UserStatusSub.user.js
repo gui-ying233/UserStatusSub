@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UserStatusSub
 // @namespace    https://github.com/gui-ying233/UserStatusSub
-// @version      1.0.0
+// @version      1.1.0
 // @description  萌娘百科UserStatus订阅
 // @author       鬼影233
 // @contributor  BearBin@BearBin1215
@@ -318,81 +318,81 @@
 					await updateUserStatus(userStatusGetLocalStorage());
 				});
 
-			function sendNotification(title) {
-				api.get({
-					action: "query",
-					format: "json",
-					prop: "revisions",
-					titles: `User:${title}/Status`,
-					utf8: 1,
-					formatversion: 2,
-					rvprop: "timestamp|content",
-				}).then((d) => {
-					const timestamp = d.query.pages[0].revisions[0].timestamp;
-					if (timestamp !== timestamps[title]) {
-						localStorage.setItem(
-							"userStatusSub",
-							JSON.stringify(userStatusGetLocalStorage()).replace(
-								`"title":"${title}","timestamp":"${timestamps[title]}"`,
-								`"title":"${title}","timestamp":"${timestamp}"`
-							)
-						);
-						timestamps[title] = timestamp;
-						let status = d.query.pages[0].revisions[0].content
-							.trim()
-							.toLowerCase();
-						switch (status) {
-							case "online":
-							case "on":
-								status = "在线";
-								break;
-							case "busy":
-								status = "忙碌";
-								break;
-							case "offline":
-							case "off":
-								status = "离线";
-								break;
-							case "away":
-								status = "已离开";
-								break;
-							case "sleeping":
-							case "sleep":
-								status = "在睡觉";
-								break;
-							case "wikibreak":
-							case "break":
-								status = "正在放萌百假期";
-								break;
-							case "holiday":
-								status = "处于假期中";
-								break;
-							default:
-								const s = document.createElement("div");
-								s.innerHTML = status;
-								status = s.innerText;
-						}
-						new Notification(`${title}已更新：`, {
-							body: status,
-							icon: `https://commons.moegirl.org.cn/extensions/Avatar/avatar.php?user=${title}`,
-						});
-					}
-				});
-			}
 			const waitTime = 300000;
 
 			var timestamps = {};
 			(async () => {
+				if (Notification.permission !== "denied") {
+					Notification.requestPermission();
+				}
 				for (const u of userStatusGetLocalStorage()) {
 					timestamps[u.title] = u.timestamp;
 					setInterval(() => {
-						if (Notification.permission === "granted") {
-							sendNotification(u.title);
-						} else if (Notification.permission !== "denied") {
-							Notification.requestPermission().then(() => {
-								sendNotification(u.title);
-							});
-						}
+						api.get({
+							action: "query",
+							format: "json",
+							prop: "revisions",
+							titles: `User:${u.title}/Status`,
+							utf8: 1,
+							formatversion: 2,
+							rvprop: "timestamp|content",
+						}).then((d) => {
+							const timestamp =
+								d.query.pages[0].revisions[0].timestamp;
+							if (timestamp !== timestamps[u.title]) {
+								localStorage.setItem(
+									"userStatusSub",
+									JSON.stringify(
+										userStatusGetLocalStorage()
+									).replace(
+										`"title":"${u.title}","timestamp":"${
+											timestamps[u.title]
+										}"`,
+										`"title":"${u.title}","timestamp":"${timestamp}"`
+									)
+								);
+								timestamps[u.title] = timestamp;
+								let status =
+									d.query.pages[0].revisions[0].content
+										.trim()
+										.toLowerCase();
+								switch (status) {
+									case "online":
+									case "on":
+										status = "在线";
+										break;
+									case "busy":
+										status = "忙碌";
+										break;
+									case "offline":
+									case "off":
+										status = "离线";
+										break;
+									case "away":
+										status = "已离开";
+										break;
+									case "sleeping":
+									case "sleep":
+										status = "在睡觉";
+										break;
+									case "wikibreak":
+									case "break":
+										status = "正在放萌百假期";
+										break;
+									case "holiday":
+										status = "处于假期中";
+										break;
+									default:
+										const s = document.createElement("div");
+										s.innerHTML = status;
+										status = s.innerText;
+								}
+								new Notification(`${u.title}已更新：`, {
+									body: status,
+									icon: `https://commons.moegirl.org.cn/extensions/Avatar/avatar.php?user=${u.title}`,
+								});
+							}
+						});
 					}, waitTime);
 					await (() => {
 						return new Promise((resolve) =>
