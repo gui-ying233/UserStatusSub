@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UserStatusSub
 // @namespace    https://github.com/gui-ying233/UserStatusSub
-// @version      1.1.0
+// @version      1.2.0
 // @description  萌娘百科UserStatus订阅
 // @author       鬼影233
 // @contributor  BearBin@BearBin1215
@@ -16,6 +16,16 @@
 
 	$(() =>
 		(async () => {
+			window.addEventListener("storage", (e) => {
+				if (e.key === "userStatusSub") {
+					if (e.newValue) {
+						localStorage.setItem("userStatusSub", e.newValue);
+					} else {
+						localStorage.removeItem("userStatusSub");
+					}
+				}
+			});
+
 			await mw.loader.using([
 				"mediawiki.api",
 				"mediawiki.notification",
@@ -389,7 +399,7 @@
 								}
 								new Notification(`${u.title}已更新：`, {
 									body: status,
-									icon: `https://commons.moegirl.org.cn/extensions/Avatar/avatar.php?user=${u.title}`,
+									icon: `//commons.moegirl.org.cn/extensions/Avatar/avatar.php?user=${u.title}`,
 								});
 							}
 						});
