@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UserStatusSub
 // @namespace    https://github.com/gui-ying233/UserStatusSub
-// @version      1.2.0
+// @version      1.3.0
 // @description  萌娘百科UserStatus订阅
 // @author       鬼影233
 // @contributor  BearBin@BearBin1215
@@ -11,12 +11,12 @@
 // @supportURL   https://github.com/gui-ying233/UserStatusSub/issues
 // ==/UserScript==
 
-(function () {
+(() => {
 	"use strict";
-
+	if (new URLSearchParams(window.location.search).get("safemode")) return;
 	$(() =>
 		(async () => {
-			window.addEventListener("storage", (e) => {
+			window.addEventListener("storage", e => {
 				if (e.key === "userStatusSub") {
 					if (e.newValue) {
 						localStorage.setItem("userStatusSub", e.newValue);
@@ -91,8 +91,8 @@
 								.querySelector("#userStatuSummary > textarea")
 								.value.trim()
 								.split("\n")
-								.map((str) => str.trim())
-								.filter((str) => str)
+								.map(str => str.trim())
+								.filter(str => str)
 						),
 					]) {
 						await api
@@ -105,7 +105,7 @@
 								formatversion: 2,
 								rvprop: "timestamp",
 							})
-							.then((d) => {
+							.then(d => {
 								if (d.query.pages[0].missing) {
 									mw.notify(`用户${t}不存在`, {
 										type: "warn",
@@ -154,7 +154,7 @@
 								utf8: 1,
 								formatversion: 2,
 							})
-							.then((d) => {
+							.then(d => {
 								const userStatusRaw =
 									document.createElement("div");
 								userStatusRaw.classList.add("userStatusRaw");
@@ -270,9 +270,9 @@
 								.getValue()
 								.trim()
 								.split("\n")
-								.map((str) => str.trim())
-								.filter((str) => str)
-								.map((str) => {
+								.map(str => str.trim())
+								.filter(str => str)
+								.map(str => {
 									return { title: str };
 								})
 						);
@@ -323,7 +323,7 @@
 					document.body.querySelector(
 						"#userStatuSummary > textarea"
 					).value = userStatusGetLocalStorage()
-						.map((u) => u.title)
+						.map(u => u.title)
 						.join("\n");
 					await updateUserStatus(userStatusGetLocalStorage());
 				});
@@ -346,7 +346,7 @@
 							utf8: 1,
 							formatversion: 2,
 							rvprop: "timestamp|content",
-						}).then((d) => {
+						}).then(d => {
 							const timestamp =
 								d.query.pages[0].revisions[0].timestamp;
 							if (timestamp !== timestamps[u.title]) {
@@ -405,7 +405,7 @@
 						});
 					}, waitTime);
 					await (() => {
-						return new Promise((resolve) =>
+						return new Promise(resolve =>
 							setTimeout(
 								resolve,
 								waitTime / userStatusGetLocalStorage().length
